@@ -1,0 +1,17 @@
+[server]
+192.168.0.124 ansible_port=2221 ansible_user=root
+
+[sit-tts]
+192.168.130.91 ansible_port=22 ansible_user=iisi ansible_password=Ie@123456 
+
+[uat-tts]
+192.168.200.40 ansible_port=22 ansible_user=ttx ansible_password=1qaz@WSX3edc 
+
+[sit-klc]
+192.168.130.61 ansible_port=22 ansible_user=iisi ansible_password=Ie@123456 
+
+[sit-tts-web]
+192.168.130.221 ansible_port=22 ansible_user=iisi ansible_password=Ie@123456
+
+[uat-tts-web]
+192.168.200.41 ansible_port=22 ansible_user=ttx ansible_password=1qaz@WSX3edc

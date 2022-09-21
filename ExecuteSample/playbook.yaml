@@ -1,0 +1,65 @@
+---
+- hosts: sit-tts
+  vars:
+    - remote_owner: iisi
+    - base_work_dir: /home/iisi/ITMS/smart-light/
+    - common_jar_dir: /home/iisi/ITMS/comm-lib/
+    - jar_name: smart-light.jar
+    - common_jar_name: itms-api-2.0.0.psql-SNAPSHOT.jar
+  tasks:
+    # task 1
+    - name: create backup folder
+      file:
+        path: "{{ base_work_dir }}build/"
+        state: directory
+        owner: "{{ remote_owner }}"
+        group: "{{ remote_owner }}"
+       
+    - name: move module jar to folder
+      copy:
+        src: "./target/{{ jar_name }}"
+        dest: "{{ base_work_dir }}build/{{ jar_name }}"
+        owner: "{{ remote_owner }}"
+        group: "{{ remote_owner }}"
+        mode: '0755'
+
+    - name: move common jar to folder
+      copy:
+        src: "./target/comm-lib/{{ common_jar_name }}"
+        dest: "{{ base_work_dir }}build/{{ common_jar_name }}"
+        owner: "{{ remote_owner }}"
+        group: "{{ remote_owner }}"
+        mode: '0755'
+
+    - name: move backup script to folder
+      copy:
+        src: ./docker/script/backup_script.sh
+        dest: "{{ base_work_dir }}build/backup_script.sh"
+        owner: "{{ remote_owner }}"
+        group: "{{ remote_owner }}"
+        mode: '0755'
+
+    - name: move execute script to folder
+      copy:
+        src: ./docker/script/execute_script.sh
+        dest: "{{ base_work_dir }}build/execute_script.sh"
+        owner: "{{ remote_owner }}"
+        group: "{{ remote_owner }}"  
+        mode: '0755'
+
+    - name: avoid common api jar is own root
+      shell:
+        cmd: "chown {{ remote_owner }}:{{ remote_owner }} {{ common_jar_name }}"
+        chdir: "{{ common_jar_dir }}"
+      become: yes
+      become_user: root
+
+    - name: execute backup script
+      shell:
+        cmd: "{{ base_work_dir }}build/backup_script.sh"
+
+    - name: execute restart script
+      shell: 
+        cmd: "{{ base_work_dir }}build/execute_script.sh"
+      become: yes      
+      become_user: root

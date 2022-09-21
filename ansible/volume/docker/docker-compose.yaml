@@ -1,0 +1,31 @@
+
+version: '3.1'
+services:
+  build-copy:
+    build:
+      args:
+        - remoteJarName=smart-light.jar
+      dockerfile: ./docker/build/Dockerfile
+      context: ..
+    command: "-r -avh build iisi@192.168.130.91:/home/iisi/ITMS/smart-light/"
+#    volumes:
+#      - C:\Users\1510002\Documents\eclipse\tts-itms-core\smart-light\docker\testTarget:/see
+
+  backup:
+    build:
+      dockerfile: ./docker/execute/Dockerfile
+      context: ..
+    command: "ssh iisi@192.168.130.91 /home/iisi/ITMS/smart-light/build/backup_script.sh"
+    depends_on:
+      - build-copy
+
+  execute:
+    build:
+      dockerfile: ./docker/execute/Dockerfile
+      context: ..
+    command: "ssh root@192.168.130.91 /home/iisi/ITMS/smart-light/build/execute_script.sh"
+    depends_on:
+      - backup
+
+
+

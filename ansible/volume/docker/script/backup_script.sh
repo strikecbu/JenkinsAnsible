@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+JAR_FILE=smart-light.jar
+COMM_LIB_FILE=itms-api-2.0.0.psql-SNAPSHOT.jar
+WORK_PATH=/home/iisi/ITMS/smart-light
+COMM_LIB_PATH=/home/iisi/ITMS/comm-lib
+
+TIME_STAMP_MARK=$(date +%Y%m%d%H%M%S)
+JAR_BACKUP_PATH=$WORK_PATH/backup/$TIME_STAMP_MARK
+COMM_LIB_BACKUP_PATH=$COMM_LIB_PATH/backup/$TIME_STAMP_MARK
+
+# 建立備份資料夾
+mkdir -p "$JAR_BACKUP_PATH"
+mkdir -p "$COMM_LIB_BACKUP_PATH"
+
+# 檔案備份
+cp $WORK_PATH/$JAR_FILE "$JAR_BACKUP_PATH"/$JAR_FILE
+cp $COMM_LIB_PATH/$COMM_LIB_FILE "$COMM_LIB_BACKUP_PATH"/$COMM_LIB_FILE
+
+# 覆蓋
+mv $WORK_PATH/build/$JAR_FILE $WORK_PATH/$JAR_FILE
+mv $WORK_PATH/build/$COMM_LIB_FILE $COMM_LIB_PATH/$COMM_LIB_FILE
